@@ -2,8 +2,8 @@
 
 1. build the fat jar: mvn package
 2. run it with the path to the json config:
-   1. `java -jar --enable-preview -jar target/fortune-postgres-fat.jar [/path/to/config.json]`
-   2`java -jar --enable-preview -jar target/fortune-mariadb-fat.jar [/path/to/config.json]`
+   1. `java -jar -jar target/fortune-postgres-fat.jar [/path/to/config.json]`
+   2`java -jar -jar target/fortune-mariadb-fat.jar [/path/to/config.json]`
 
 With `config.json`:
 

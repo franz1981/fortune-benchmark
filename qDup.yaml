@@ -227,7 +227,7 @@ scripts:
     - read-state: ${{SERVER_MEMORY}}
       then:
         - sh: JAVA_OPTS="$JAVA_OPTS -Xms${{SERVER_MEMORY}} -Xmx${{SERVER_MEMORY}}"
-    - sh: taskset --cpu-list ${{SERVER_CPUS}} java -XX:+UseNUMA -Dfortune-server-process $JAVA_OPTS ${{SERVER_OPTS}} -jar quarkus-run.jar
+    - sh: taskset --cpu-list ${{SERVER_CPUS}} java -XX:+UnlockDiagnosticVMOptions -XX:+DebugNonSafepoints -XX:+UnlockExperimentalVMOptions -XX:-DoJVMTIVirtualThreadTransitions -XX:+UseNUMA -Dfortune-server-process $JAVA_OPTS ${{SERVER_OPTS}} -jar quarkus-run.jar
       idle-timer: 5m
       on-signal:
         HYPERFOIL_DONE:
@@ -296,16 +296,16 @@ scripts:
           then:
             - regex: async-jfr
               then:
-                - sh: ${{WORKDIR}}/async-profiler-src/profiler.sh start -o jfr -f ${{WORKDIR}}/profiling/${{CURRENT_IMPLEMENTATION}}-async.jfr ${{PROFILER_ARGS}} ${{SERVER_PID}}
-                - sh: ${{WORKDIR}}/async-profiler-src/profiler.sh status ${{SERVER_PID}}
+                - sh: ${{WORKDIR}}/async-profiler-src/build/in/asprof start -o jfr -f ${{WORKDIR}}/profiling/${{CURRENT_IMPLEMENTATION}}-async.jfr ${{PROFILER_ARGS}} ${{SERVER_PID}}
+                - sh: ${{WORKDIR}}/async-profiler-src/build/in/asprof status ${{SERVER_PID}}
                 - wait-for: HYPERFOIL_DONE
-                - sh: ${{WORKDIR}}/async-profiler-src/profiler.sh stop ${{SERVER_PID}} > ${{WORKDIR}}/profiling/${{CURRENT_IMPLEMENTATION}}-async.txt
+                - sh: ${{WORKDIR}}/async-profiler-src/build/in/asprof stop ${{SERVER_PID}} > ${{WORKDIR}}/profiling/${{CURRENT_IMPLEMENTATION}}-async.txt
             - regex: async-flame
               then:
-                - sh: ${{WORKDIR}}/async-profiler-src/profiler.sh start ${{PROFILER_ARGS}} ${{SERVER_PID}}
-                - sh: ${{WORKDIR}}/async-profiler-src/profiler.sh status ${{SERVER_PID}}
+                - sh: ${{WORKDIR}}/async-profiler-src/build/in/asprof start ${{PROFILER_ARGS}} ${{SERVER_PID}}
+                - sh: ${{WORKDIR}}/async-profiler-src/build/in/asprof status ${{SERVER_PID}}
                 - wait-for: HYPERFOIL_DONE
-                - sh: ${{WORKDIR}}/async-profiler-src/profiler.sh stop -o flamegraph -f ${{WORKDIR}}/profiling/${{CURRENT_IMPLEMENTATION}}-async.html ${{SERVER_PID}}
+                - sh: ${{WORKDIR}}/async-profiler-src/build/in/asprof stop -o flamegraph -f ${{WORKDIR}}/profiling/${{CURRENT_IMPLEMENTATION}}-async.html ${{SERVER_PID}}
         - sleep: 1s # allow time for BENCHMARK_DONE to be set
 
   cleanup-profiling:
@@ -438,7 +438,7 @@ states:
     fortune-blocking-mariadb:
       type: quarkus
       properties: &quarkus-mariadb-jdbc-definition
-        - "jdk19 --enable-preview --add-opens java.base/java.lang=ALL-UNNAMED"
+        - "jdk21 --add-opens java.base/java.lang=ALL-UNNAMED"
         - "quarkus.datasource.jdbc.url=jdbc:mariadb://localhost/fortunedb"
         - "quarkus.datasource.username=fortune"
         - "quarkus.datasource.password=fbench-pw"
@@ -447,7 +447,7 @@ states:
     fortune-reactive-mariadb:
       type: quarkus
       properties: &quarkus-mariadb-reactive-definition
-        - "jdk19 --enable-preview --add-opens java.base/java.lang=ALL-UNNAMED"
+        - "jdk21 --add-opens java.base/java.lang=ALL-UNNAMED"
         - "quarkus.datasource.reactive.url=mariadb://localhost/fortunedb"
         - "quarkus.datasource.username=fortune"
         - "quarkus.datasource.password=fbench-pw"
@@ -461,7 +461,7 @@ states:
     fortune-blocking-postgresql:
       type: quarkus
       properties: &quarkus-postgresql-jdbc-definition
-        - "jdk19 --enable-preview --add-opens java.base/java.lang=ALL-UNNAMED"
+        - "jdk21 --add-opens java.base/java.lang=ALL-UNNAMED"
         - "quarkus.datasource.jdbc.url=jdbc:postgresql://localhost/fortunedb"
         - "quarkus.datasource.username=fortune"
         - "quarkus.datasource.password=fbench-pw"
@@ -470,7 +470,7 @@ states:
     fortune-reactive-postgresql:
       type: quarkus
       properties: &quarkus-postgresql-reactive-definition
-        - "jdk19 --enable-preview --add-opens java.base/java.lang=ALL-UNNAMED"
+        - "jdk21 --add-opens java.base/java.lang=ALL-UNNAMED"
         - "quarkus.datasource.reactive.url=postgresql://localhost/fortunedb"
         - "quarkus.datasource.username=fortune"
         - "quarkus.datasource.password=fbench-pw"
@@ -487,7 +487,7 @@ states:
   PROFILER_ARGS:
 
   ASYNC_PROFILER_REPO_URL: https://github.com/jvm-profiling-tools/async-profiler
-  ASYNC_PROFILER_REPO_COMMIT: v2.9
+  ASYNC_PROFILER_REPO_COMMIT: v3.0
 
   # CPU and memory restrictions
   JDK_PARALLELISM:
