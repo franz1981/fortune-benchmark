@@ -89,18 +89,13 @@
                     <configuration>
                         <source>21</source>
                         <target>21</target>
-                        <compilerArgs>
-                            <arg>-parameters</arg>
-                            <arg>--enable-preview</arg>
-                            <arg>--add-modules=jdk.incubator.concurrent</arg>
-                        </compilerArgs>
                     </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${surefire-plugin.version}</version>
                     <configuration>
-                        <argLine>--enable-preview --add-modules=jdk.incubator.concurrent</argLine>
+                        <argLine>--add-opens java.base/java.lang=ALL-UNNAMED</argLine>
                         <systemPropertyVariables>
                             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                             <!--suppress UnresolvedMavenProperty -->
