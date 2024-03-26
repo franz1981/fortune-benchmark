@@ -117,10 +117,10 @@ scripts:
 
   sdk-select-jdk:
     - sh:
-        command: sdk install java ${{JAVA_VERSION:19.0.2-open}}
+        command: sdk install java ${{JAVA_VERSION:21.0.2-open}}
         prompt:
           "set as default? (Y/n): ": Y
-    - sh: sdk use java ${{JAVA_VERSION:19.0.2-open}}
+    - sh: sdk use java ${{JAVA_VERSION:21.0.2-open}}
     - sh: java -version
 
   sdk-install-maven:
@@ -128,7 +128,7 @@ scripts:
     - regex: no mvn in
       then:
         - sh:
-            command: sdk install maven ${{MAVEN_VERSION:3.8.7}}
+            command: sdk install maven ${{MAVEN_VERSION:3.9.3}}
             prompt:
               "set as default? (Y/n): ": Y
     - sh: mvn -version
