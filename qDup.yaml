@@ -296,16 +296,16 @@ scripts:
           then:
             - regex: async-jfr
               then:
-                - sh: ${{WORKDIR}}/async-profiler-src/build/in/asprof start -o jfr -f ${{WORKDIR}}/profiling/${{CURRENT_IMPLEMENTATION}}-async.jfr ${{PROFILER_ARGS}} ${{SERVER_PID}}
-                - sh: ${{WORKDIR}}/async-profiler-src/build/in/asprof status ${{SERVER_PID}}
+                - sh: ${{WORKDIR}}/async-profiler-src/build/bin/asprof start -o jfr -f ${{WORKDIR}}/profiling/${{CURRENT_IMPLEMENTATION}}-async.jfr ${{PROFILER_ARGS}} ${{SERVER_PID}}
+                - sh: ${{WORKDIR}}/async-profiler-src/build/bin/asprof status ${{SERVER_PID}}
                 - wait-for: HYPERFOIL_DONE
-                - sh: ${{WORKDIR}}/async-profiler-src/build/in/asprof stop ${{SERVER_PID}} > ${{WORKDIR}}/profiling/${{CURRENT_IMPLEMENTATION}}-async.txt
+                - sh: ${{WORKDIR}}/async-profiler-src/build/bin/asprof stop ${{SERVER_PID}} > ${{WORKDIR}}/profiling/${{CURRENT_IMPLEMENTATION}}-async.txt
             - regex: async-flame
               then:
-                - sh: ${{WORKDIR}}/async-profiler-src/build/in/asprof start ${{PROFILER_ARGS}} ${{SERVER_PID}}
-                - sh: ${{WORKDIR}}/async-profiler-src/build/in/asprof status ${{SERVER_PID}}
+                - sh: ${{WORKDIR}}/async-profiler-src/build/bin/asprof start ${{PROFILER_ARGS}} ${{SERVER_PID}}
+                - sh: ${{WORKDIR}}/async-profiler-src/build/bin/asprof status ${{SERVER_PID}}
                 - wait-for: HYPERFOIL_DONE
-                - sh: ${{WORKDIR}}/async-profiler-src/build/in/asprof stop -o flamegraph -f ${{WORKDIR}}/profiling/${{CURRENT_IMPLEMENTATION}}-async.html ${{SERVER_PID}}
+                - sh: ${{WORKDIR}}/async-profiler-src/build/bin/asprof stop -o flamegraph -f ${{WORKDIR}}/profiling/${{CURRENT_IMPLEMENTATION}}-async.html ${{SERVER_PID}}
         - sleep: 1s # allow time for BENCHMARK_DONE to be set
 
   cleanup-profiling:
