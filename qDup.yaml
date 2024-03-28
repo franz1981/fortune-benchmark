@@ -117,10 +117,10 @@ scripts:
 
   sdk-select-jdk:
     - sh:
-        command: sdk install java ${{JAVA_VERSION:21.0.2-open}}
+        command: sdk install java ${{JAVA_VERSION:19.0.2-open}}
         prompt:
           "set as default? (Y/n): ": Y
-    - sh: sdk use java ${{JAVA_VERSION:21.0.2-open}}
+    - sh: sdk use java ${{JAVA_VERSION:19.0.2-open}}
     - sh: java -version
 
   sdk-install-maven:
@@ -438,7 +438,7 @@ states:
     fortune-blocking-mariadb:
       type: quarkus
       properties: &quarkus-mariadb-jdbc-definition
-        - "jdk21 --add-opens java.base/java.lang=ALL-UNNAMED"
+        - "jdk19 --enable-preview --add-opens java.base/java.lang=ALL-UNNAMED"
         - "quarkus.datasource.jdbc.url=jdbc:mariadb://localhost/fortunedb"
         - "quarkus.datasource.username=fortune"
         - "quarkus.datasource.password=fbench-pw"
@@ -447,7 +447,7 @@ states:
     fortune-reactive-mariadb:
       type: quarkus
       properties: &quarkus-mariadb-reactive-definition
-        - "jdk21 --add-opens java.base/java.lang=ALL-UNNAMED"
+        - "jdk19 --enable-preview --add-opens java.base/java.lang=ALL-UNNAMED"
         - "quarkus.datasource.reactive.url=mariadb://localhost/fortunedb"
         - "quarkus.datasource.username=fortune"
         - "quarkus.datasource.password=fbench-pw"
@@ -461,7 +461,7 @@ states:
     fortune-blocking-postgresql:
       type: quarkus
       properties: &quarkus-postgresql-jdbc-definition
-        - "jdk21 --add-opens java.base/java.lang=ALL-UNNAMED"
+        - "jdk19 --enable-preview --add-opens java.base/java.lang=ALL-UNNAMED"
         - "quarkus.datasource.jdbc.url=jdbc:postgresql://localhost/fortunedb"
         - "quarkus.datasource.username=fortune"
         - "quarkus.datasource.password=fbench-pw"
@@ -470,7 +470,7 @@ states:
     fortune-reactive-postgresql:
       type: quarkus
       properties: &quarkus-postgresql-reactive-definition
-        - "jdk21 --add-opens java.base/java.lang=ALL-UNNAMED"
+        - "jdk19 --enable-preview --add-opens java.base/java.lang=ALL-UNNAMED"
         - "quarkus.datasource.reactive.url=postgresql://localhost/fortunedb"
         - "quarkus.datasource.username=fortune"
         - "quarkus.datasource.password=fbench-pw"
